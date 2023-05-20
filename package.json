@@ -1,0 +1,17 @@
+{
+  "name": "unreliabot",
+  "version": "1.0.0",
+  "description": "A multipurpose, personal Twitch chatbot project.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "00Chaotic",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@twurple/auth": "^6.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.41.0"
+  }
+}
