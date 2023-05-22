@@ -5,7 +5,8 @@
 		"es6": true
 	},
 	"ignorePatterns": [
-		"db/**/*"
+		"db/**/*",
+		"src/db/models/*"
 	],
 	"parserOptions": {
 		"ecmaVersion": 2021
