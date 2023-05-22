@@ -4,14 +4,20 @@
   "description": "A multipurpose, personal Twitch chatbot project.",
   "main": "src/index.js",
   "scripts": {
+    "migrate:up": "npx sequelize-cli db:migrate",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "00Chaotic",
   "license": "UNLICENSED",
   "dependencies": {
-    "@twurple/auth": "^6.2.0"
+    "@twurple/auth": "^6.2.0",
+    "pg": "^8.11.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.31.1"
   },
   "devDependencies": {
-    "eslint": "^8.41.0"
+    "eslint": "^8.41.0",
+    "sequelize-cli": "^6.6.0"
   }
 }
