@@ -8,4 +8,4 @@ RUN chmod u+x ./scripts/docker-setup.sh && ./scripts/docker-setup.sh
 
 COPY . .
 
-CMD ["node", "."]
+# No CMD statement as app is started from docker-entrypoint.sh script
