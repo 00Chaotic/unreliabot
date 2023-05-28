@@ -5,6 +5,7 @@ const { Sequelize } = require('sequelize');
  * @returns {Sequelize | Error} Active Sequelize instance or an error
  */
 module.exports = function newDBConnection() {
+
   const sequelize = new Sequelize(process.env.POSTGRES_CONNECTION_STRING, {
     define: {
       freezeTableName: true,
