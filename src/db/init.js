@@ -2,18 +2,16 @@ const { Sequelize } = require('sequelize');
 
 /**
  * Returns a new active Sequelize instance, or an error on failure
- * @returns {Sequelize | Error} Active Sequelize instance or an error
+ * @returns { Sequelize } Active Sequelize instance.
  */
-module.exports = function newDBConnection() {
+module.exports = async function newDBConnection() {
 
   const sequelize = new Sequelize(process.env.POSTGRES_CONNECTION_STRING, {
     define: {
       freezeTableName: true,
     },
     // Only log SQL queries in dev env
-    logging: (msg) => {
-      process.env.NODE_ENV == 'DEV' ? console.debug(msg) : false;
-    },
+    logging: (msg) => { process.env.NODE_ENV == 'DEV' ? console.debug(msg) : false; },
     pool: {
       acquire: 30000,
       idle: 10000,
@@ -22,10 +20,7 @@ module.exports = function newDBConnection() {
     },
   });
 
-  try {
-    sequelize.authenticate();
-    return { dbConn: sequelize };
-  } catch (err) {
-    return { error: err };
-  }
+  sequelize.authenticate()
+    .then(() => { return sequelize; })
+    .catch(err => { throw err; });
 };

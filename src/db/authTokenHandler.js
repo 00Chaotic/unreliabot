@@ -9,18 +9,19 @@ const { DataTypes } = require('sequelize');
  * @returns { Boolean } True if record was successfully created
  */
 exports.UpsertOne = async (db, userId, token) => {
+
   const AuthTokenModel = AuthTokenModelFunc(db, DataTypes);
 
-  const [ , created ] = await AuthTokenModel.upsert({
+  AuthTokenModel.upsert({
     user_id: userId,
     access_token: token.accessToken,
     expires_in: token.expiresIn,
     obtainment_timestamp: token.obtainmentTimestamp,
     refresh_token: token.refreshToken,
     scope: token.scope,
-  });
-
-  return created;
+  })
+    .then((_, isCreated) => { return isCreated; })
+    .catch(err => { throw err; });
 };
 
 // Sample findOne query

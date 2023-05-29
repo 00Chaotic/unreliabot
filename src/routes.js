@@ -17,18 +17,18 @@ app.get('/authorize',
     const validationErr = validationResult(req);
 
     if (!validationErr.isEmpty()) {
-      return res.status(400).send('Bad request');
+      return res.status(400).send('Bad Request');
     }
 
     const data = matchedData(req);
-    const err = await addUserToken(app.get('db'), data.code);
+    addUserToken(app.get('db'), data.code)
+      .catch((err) => {
+        console.error('Error completing authorization request: ' + err);
+        return res.status(500).send('Internal Server Error');
+      }
+    );
 
-    if (err) {
-      console.log(err);
-      res.status(500).send();
-    }
-
-    res.status(200).send();
+    res.status(200).send('Successfully Authorized');
   },
 );
 
