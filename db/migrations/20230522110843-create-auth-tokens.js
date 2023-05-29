@@ -13,11 +13,11 @@ module.exports = {
         type: Sequelize.STRING
       },
       expires_in: {
-        type: Sequelize.TIME
+        type: Sequelize.INTEGER
       },
       obtainment_timestamp: {
         allowNull: false,
-        type: Sequelize.TIME
+        type: Sequelize.DATE
       },
       refresh_token: {
         type: Sequelize.STRING

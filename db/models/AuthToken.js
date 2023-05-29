@@ -19,16 +19,16 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.STRING,
     },
-    accessToken: {
+    access_token: {
       allowNull: false,
       type: DataTypes.STRING,
     },
-    expiresIn: DataTypes.TIME,
-    obtainmentTimestamp: {
+    expires_in: DataTypes.INTEGER,
+    obtainment_timestamp: {
       allowNull: false,
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
     },
-    refreshToken: DataTypes.STRING,
+    refresh_token: DataTypes.STRING,
     scope: {
       allowNull: false,
       type: DataTypes.ARRAY(DataTypes.STRING),
