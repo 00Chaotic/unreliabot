@@ -14,6 +14,12 @@ module.exports = function newDBConnection() {
     logging: (msg) => {
       process.env.NODE_ENV == 'DEV' ? console.debug(msg) : false;
     },
+    pool: {
+      acquire: 30000,
+      idle: 10000,
+      max: 5,
+      min: 0,
+    },
   });
 
   try {
