@@ -8,6 +8,8 @@ services:
         condition: service_healthy
     entrypoint: scripts/docker-entrypoint.sh
     env_file: .env
+    ports:
+      - '3001:3001'
 
   postgres:
     env_file: .env
