@@ -1,8 +1,13 @@
-const { RefreshingAuthProvider, exchangeCode } = require('@twurple/auth');
+const { exchangeCode } = require('@twurple/auth');
 
 const authTokenHandler = require('../db/authTokenHandler');
 
-exports.restoreAccessTokens = async (db) => {
+/**
+ * Retrieves existing user access tokens and adds them to the auth provider
+ * @param { RefreshingAuthProvider } refreshingAuthProvider Auth provider to add user access tokens to
+ * @param { Sequelize } db Sequelize database connection
+ */
+exports.restoreAccessTokens = async (authProvider, db) => {
 
   if (!db) {
     throw new Error('Missing database instance');
@@ -12,16 +17,17 @@ exports.restoreAccessTokens = async (db) => {
 
   authTokens.forEach((value) => {
     const accessToken = toAccessToken(value);
-    newRefreshingAuthProvider().addUser(value.user_id, accessToken);
+    authProvider.addUser(value.user_id, accessToken);
   });
 };
 
 /**
  * Creates and saves a refreshing user access token
+ * @param { RefreshingAuthProvider } authProvider Auth provider to add user access tokens to
  * @param { Sequelize } db Sequelize database connection
  * @param { String } authCode Authorization code used to get an access token
  */
-exports.addUserToken = async (db, authCode) => {
+exports.addUserToken = async (authProvider, db, authCode) => {
 
   if (!db || !authCode) {
     throw new Error('Missing database instance or authorization code');
@@ -30,29 +36,11 @@ exports.addUserToken = async (db, authCode) => {
   const initialToken = await exchangeCode(process.env.CLIENT_ID, process.env.CLIENT_SECRET, authCode, process.env.TWITCH_AUTH_REDIRECT_URI);
 
   try {
-    const userId = await newRefreshingAuthProvider(db).addUserForToken(initialToken);
+    const userId = await authProvider.addUserForToken(initialToken);
     await authTokenHandler.UpsertOne(db, userId, initialToken);
   } catch (err) {
     throw new Error('Error adding user access token: ' + err.message);
   }
-};
-
-/**
- * @returns { RefreshingAuthProvider } new `RefreshingAuthProvider` instance
- */
-const newRefreshingAuthProvider = (db) => {
-
-  return new RefreshingAuthProvider({
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    onRefresh: async (userId, newTokenData) => {
-      try {
-        await authTokenHandler.UpsertOne(db, userId, newTokenData);
-      } catch (err) {
-        console.error('Error upserting auth token: ' + err.message);
-      }
-    },
-  });
 };
 
 /**

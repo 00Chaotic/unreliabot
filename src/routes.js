@@ -23,7 +23,7 @@ app.get('/authorize',
     const data = matchedData(req);
 
     try {
-      await addUserToken(app.get('db'), data.code);
+      await addUserToken(app.get('authProvider'), app.get('db'), data.code);
     } catch (err) {
       console.error('Error completing authorization request: ' + err.message);
       return res.status(500).send('Internal Server Error');
