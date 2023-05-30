@@ -24,5 +24,5 @@ exports.addUserToken = async (db, authCode) => {
     },
   })
   .addUserForToken(initialToken)
-  .catch(err => { throw new Error('Error adding user access token: ' + err); });
+    .catch(err => { throw new Error('Error adding user access token: ' + err); });
 };
