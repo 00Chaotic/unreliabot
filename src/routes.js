@@ -21,12 +21,13 @@ app.get('/authorize',
     }
 
     const data = matchedData(req);
-    addUserToken(app.get('db'), data.code)
-      .catch((err) => {
-        console.error('Error completing authorization request: ' + err);
-        return res.status(500).send('Internal Server Error');
-      }
-    );
+
+    try {
+      await addUserToken(app.get('db'), data.code);
+    } catch (err) {
+      console.error('Error completing authorization request: ' + err.message);
+      return res.status(500).send('Internal Server Error');
+    }
 
     res.status(200).send('Successfully Authorized');
   },

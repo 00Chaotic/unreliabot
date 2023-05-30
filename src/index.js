@@ -1,13 +1,31 @@
 const app = require('./routes');
 const newDBConnection = require('./db/init');
+const { restoreAccessTokens } = require('./auth/tokenHandler');
 
-let dbConn;
-newDBConnection()
-  .then((conn) => { dbConn = conn; })
-  .catch((err) => { console.error('Error initialising database connection: ' + err); });
+/**
+ * Run program
+ */
+const run = async () => {
 
-app.set('db', dbConn);
+  let dbConn;
 
-app.listen(3001, () => {
-  console.log('Listening on port 3001...');
-});
+  try {
+    dbConn = await newDBConnection();
+  } catch (err) {
+    console.error('Error initialising database connection: ' + err.message);
+  }
+
+  try {
+    await restoreAccessTokens(dbConn);
+  } catch (err) {
+    console.error('Error restoring access tokens: ' + err.message);
+  }
+
+  app.set('db', dbConn);
+
+  app.listen(3001, () => {
+    console.log('Listening on port 3001...');
+  });
+};
+
+run();

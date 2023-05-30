@@ -2,7 +2,7 @@ const { Sequelize } = require('sequelize');
 
 /**
  * Returns a new active Sequelize instance, or an error on failure
- * @returns { Sequelize } Active Sequelize instance.
+ * @returns { Promise<Sequelize> } Active Sequelize instance
  */
 module.exports = async function newDBConnection() {
 
@@ -20,7 +20,7 @@ module.exports = async function newDBConnection() {
     },
   });
 
-  sequelize.authenticate()
-    .then(() => { return sequelize; })
-    .catch(err => { throw err; });
+  await sequelize.authenticate();
+
+  return sequelize;
 };
